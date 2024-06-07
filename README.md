@@ -9,7 +9,7 @@ The main idea is to build two different security controls:
 
 ![Architecture diagram](./images/full-architecture.png)
 
-This example requires the use of 2 AWS Accounts: 1 for the central Networking, Security and automation resources; and another one for the spoke VPCs. The following resources are created in 3 AWS Regions (**us-east-1**, **us-east-2**, and **eu-west-1**):
+This example requires the use of 2 AWS Accounts: one for the central Networking, Security and automation resources; and another one for the spoke VPCs. The following resources are created in 3 AWS Regions (**us-east-1**, **us-east-2**, and **eu-west-1**):
 
 **Networking Account**
 
@@ -43,7 +43,7 @@ This example requires the use of 2 AWS Accounts: 1 for the central Networking, S
 * This repository does not configure Amazon GuardDuty. Check the [documentation](https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_settingup.html) to understand how to enable it in your AWS Accounts (if not done already).
 * Terraform installed.
 
-## Code Principles
+## Code Principles
 
 * Writing DRY (Do No Repeat Yourself) code using a modular design pattern.
 
@@ -61,7 +61,7 @@ git clone https://github.com/aws-samples/build-enforce-network-security-multi-ac
     * EC2 Instance types.
 * To share parameters between AWS Accounts, you will need to provide the Account ID of the corresponding Account in each folder. We recommend the use of tha *tfvars* file.
 
-## Deployment
+## Deployment
 
 * **Step 1**: Networking Account resources
 
@@ -77,7 +77,7 @@ cd spoke/
 terraform apply
 ```
 
-## Cleanup
+## Cleanup
 
 * **Step 1**: Spoke Account resources
 
@@ -92,12 +92,6 @@ terraform apply
 cd network/
 terraform apply
 ```
-
-## Testing automations
-
-
-
-
 
 ## Security
 
