@@ -24,13 +24,7 @@ variable "guarduty_finding_names" {
   default = [
     "UnauthorizedAccess:EC2/MaliciousIPCaller.Custom",
     "CryptoCurrency:EC2/BitcoinTool.B!DNS",
-    "Execution:Runtime/MaliciousFileExecuted",
-    "UnauthorizedAccess:EC2/SSHBruteForce",
-    "Execution:Runtime/SuspiciousCommand",
-    "Recon:EC2/PortProbeUnprotectedPort",
-    "Trojan:EC2/DNSDataExfiltration",
-    "Backdoor:EC2/C&CActivity.B!DNS",
-    "Execution:EC2/MaliciousFile"
+    "Execution:Runtime/SuspiciousTool"
   ]
 }
 

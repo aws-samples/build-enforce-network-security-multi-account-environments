@@ -2,7 +2,6 @@
 data "aws_region" "region" {}
 
 # ---------- AMAZON EVENTBRIDGE ----------
-
 resource "aws_cloudwatch_event_rule" "event_rule" {
   name        = "guardduty-event-rule-${data.aws_region.region.name}"
   description = "Capture Amazon GuardDuty findings."

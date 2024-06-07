@@ -43,7 +43,6 @@
 
 | Name | Type |
 |------|------|
-| [aws_fms_policy.nvirginia_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/fms_policy) | resource |
 | [aws_iam_policy.automation_lambda_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_role.automation_lambda_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy_attachment.automation_lambda_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
@@ -69,7 +68,7 @@
 |------|-------------|------|---------|:--------:|
 | <a name="input_spoke_account_id"></a> [spoke\_account\_id](#input\_spoke\_account\_id) | Spoke AWS Account ID. | `string` | n/a | yes |
 | <a name="input_aws_regions"></a> [aws\_regions](#input\_aws\_regions) | AWS Regions to create the environment. | `map(string)` | <pre>{<br>  "ireland": "eu-west-1",<br>  "nvirginia": "us-east-1",<br>  "ohio": "us-east-2"<br>}</pre> | no |
-| <a name="input_guarduty_finding_names"></a> [guarduty\_finding\_names](#input\_guarduty\_finding\_names) | List of GuardDuty Finding names to filter in EventBridge. | `list(string)` | <pre>[<br>  "UnauthorizedAccess:EC2/MaliciousIPCaller.Custom",<br>  "CryptoCurrency:EC2/BitcoinTool.B!DNS",<br>  "Execution:Runtime/MaliciousFileExecuted",<br>  "UnauthorizedAccess:EC2/SSHBruteForce",<br>  "Execution:Runtime/SuspiciousCommand",<br>  "Recon:EC2/PortProbeUnprotectedPort",<br>  "Trojan:EC2/DNSDataExfiltration",<br>  "Backdoor:EC2/C&CActivity.B!DNS",<br>  "Execution:EC2/MaliciousFile"<br>]</pre> | no |
+| <a name="input_guarduty_finding_names"></a> [guarduty\_finding\_names](#input\_guarduty\_finding\_names) | List of GuardDuty Finding names to filter in EventBridge. | `list(string)` | <pre>[<br>  "UnauthorizedAccess:EC2/MaliciousIPCaller.Custom",<br>  "CryptoCurrency:EC2/BitcoinTool.B!DNS",<br>  "Execution:Runtime/SuspiciousTool"<br>]</pre> | no |
 | <a name="input_identifier"></a> [identifier](#input\_identifier) | Project Identifier, used as identifer when creating resources. | `string` | `"nis342"` | no |
 
 ## Outputs

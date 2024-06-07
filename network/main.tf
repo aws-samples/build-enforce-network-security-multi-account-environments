@@ -427,36 +427,3 @@ module "ireland_retrieve_parameters" {
   account_id = var.spoke_account_id
   parameters = local.parameters
 }
-
-# ---------- AWS FIREWALL MANAGER ----------
-resource "aws_fms_policy" "nvirginia_policy" {
-  provider = aws.awsnvirginia
-
-  delete_unused_fm_managed_resources = false
-  exclude_resource_tags              = false
-  name                               = "example-nvirginia-sg"
-  remediation_enabled                = false
-  resource_type                      = "AWS::EC2::SecurityGroup"
-
-  security_service_policy_data {
-    type = "SECURITY_GROUPS_CONTENT_AUDIT"
-
-    managed_service_data = jsonencode({
-      type = "SECURITY_GROUPS_CONTENT_AUDIT"
-      preManagedOptions = [
-        {
-          denyAnyIpAddress = {
-            enabled = true
-          }
-        },
-        {
-          allowedProtocolsLists = {
-            customListIds = ["1f305153-e3a3-4598-ba5a-468c9a34c47a"]
-          }
-          auditSgDirection = {
-            type = "INGRESS"
-          }
-      }]
-    })
-  }
-}
