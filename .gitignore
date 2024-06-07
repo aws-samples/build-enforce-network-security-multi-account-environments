@@ -47,3 +47,5 @@ keys/
 gcm-diagnose.log
 
 **/client_vpn_config/*
+
+*.bkp

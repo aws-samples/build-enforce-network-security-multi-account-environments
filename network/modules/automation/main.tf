@@ -2,6 +2,7 @@
 data "aws_region" "region" {}
 
 # ---------- AMAZON EVENTBRIDGE ----------
+
 resource "aws_cloudwatch_event_rule" "event_rule" {
   name        = "guardduty-event-rule-${data.aws_region.region.name}"
   description = "Capture Amazon GuardDuty findings."
@@ -9,17 +10,7 @@ resource "aws_cloudwatch_event_rule" "event_rule" {
   event_pattern = jsonencode({
     source = ["aws.guardduty"]
     detail = {
-      type = [
-        "UnauthorizedAccess:EC2/MaliciousIPCaller.Custom",
-        "CryptoCurrency:EC2/BitcoinTool.B!DNS",
-        "Execution:Runtime/MaliciousFileExecuted",
-        "UnauthorizedAccess:EC2/SSHBruteForce",
-        "Execution:Runtime/SuspiciousCommand",
-        "Recon:EC2/PortProbeUnprotectedPort",
-        "Trojan:EC2/DNSDataExfiltration",
-        "Backdoor:EC2/C&CActivity.B!DNS",
-        "Execution:EC2/MaliciousFile"
-      ]
+      type = var.guardduty_finding_names
     }
   })
 }
@@ -58,7 +49,7 @@ resource "aws_lambda_permission" "eventbridge_lambda_permission" {
 # ---------- AWS LAMBDA FUNCTION ----------
 resource "aws_lambda_function" "lambda_function" {
   function_name    = "${data.aws_region.region.name}-automation-function"
-  filename         = "automation.zip"
+  filename         = "${path.module}/automation.zip"
   source_code_hash = var.source_code_hash
 
   role        = var.lambda_role_arn

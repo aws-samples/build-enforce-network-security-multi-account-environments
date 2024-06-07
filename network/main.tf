@@ -18,9 +18,10 @@ module "nvirginia_automation" {
   providers = { aws = aws.awsnvirginia }
   source    = "./modules/automation"
 
-  source_code_hash = data.archive_file.cwan_automation_package.output_base64sha256
-  lambda_role_arn  = aws_iam_role.automation_lambda_role.arn
-  core_network_id  = aws_networkmanager_core_network.core_network.id
+  source_code_hash        = data.archive_file.cwan_automation_package.output_base64sha256
+  lambda_role_arn         = aws_iam_role.automation_lambda_role.arn
+  core_network_id         = aws_networkmanager_core_network.core_network.id
+  guardduty_finding_names = var.guarduty_finding_names
 }
 
 # Ireland
@@ -28,9 +29,10 @@ module "ireland_automation" {
   providers = { aws = aws.awsireland }
   source    = "./modules/automation"
 
-  source_code_hash = data.archive_file.cwan_automation_package.output_base64sha256
-  lambda_role_arn  = aws_iam_role.automation_lambda_role.arn
-  core_network_id  = aws_networkmanager_core_network.core_network.id
+  source_code_hash        = data.archive_file.cwan_automation_package.output_base64sha256
+  lambda_role_arn         = aws_iam_role.automation_lambda_role.arn
+  core_network_id         = aws_networkmanager_core_network.core_network.id
+  guardduty_finding_names = var.guarduty_finding_names
 }
 
 # Ohio
@@ -38,9 +40,10 @@ module "ohio_automation" {
   providers = { aws = aws.awsohio }
   source    = "./modules/automation"
 
-  source_code_hash = data.archive_file.cwan_automation_package.output_base64sha256
-  lambda_role_arn  = aws_iam_role.automation_lambda_role.arn
-  core_network_id  = aws_networkmanager_core_network.core_network.id
+  source_code_hash        = data.archive_file.cwan_automation_package.output_base64sha256
+  lambda_role_arn         = aws_iam_role.automation_lambda_role.arn
+  core_network_id         = aws_networkmanager_core_network.core_network.id
+  guardduty_finding_names = var.guarduty_finding_names
 }
 
 # IAM Role
@@ -426,34 +429,34 @@ module "ireland_retrieve_parameters" {
 }
 
 # ---------- AWS FIREWALL MANAGER ----------
-# resource "aws_fms_policy" "nvirginia_policy" {
-#   provider = aws.awsnvirginia
+resource "aws_fms_policy" "nvirginia_policy" {
+  provider = aws.awsnvirginia
 
-#   delete_unused_fm_managed_resources = false
-#   exclude_resource_tags              = false
-#   name                               = "example-nvirginia-sg"
-#   remediation_enabled                = false
-#   resource_type                      = "AWS::EC2::SecurityGroup"
+  delete_unused_fm_managed_resources = false
+  exclude_resource_tags              = false
+  name                               = "example-nvirginia-sg"
+  remediation_enabled                = false
+  resource_type                      = "AWS::EC2::SecurityGroup"
 
-#   security_service_policy_data {
-#     type = "SECURITY_GROUPS_CONTENT_AUDIT"
+  security_service_policy_data {
+    type = "SECURITY_GROUPS_CONTENT_AUDIT"
 
-#     managed_service_data = jsonencode({
-#       type = "SECURITY_GROUPS_CONTENT_AUDIT"
-#       preManagedOptions = [
-#         {
-#           denyAnyIpAddress = {
-#             enabled = true
-#           }
-#         },
-#         {
-#           allowedProtocolsLists = {
-#             customListIds = ["1f305153-e3a3-4598-ba5a-468c9a34c47a"]
-#           }
-#           auditSgDirection = {
-#             type = "INGRESS"
-#           }
-#       }]
-#     })
-#   }
-# }
+    managed_service_data = jsonencode({
+      type = "SECURITY_GROUPS_CONTENT_AUDIT"
+      preManagedOptions = [
+        {
+          denyAnyIpAddress = {
+            enabled = true
+          }
+        },
+        {
+          allowedProtocolsLists = {
+            customListIds = ["1f305153-e3a3-4598-ba5a-468c9a34c47a"]
+          }
+          auditSgDirection = {
+            type = "INGRESS"
+          }
+      }]
+    })
+  }
+}
