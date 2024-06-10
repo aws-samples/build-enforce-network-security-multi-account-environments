@@ -25,7 +25,7 @@ locals {
   # We get the list of AWS Region names from var.aws_regions
   region_names = keys({ for k, v in var.aws_regions : k => v })
   # List of routing domains
-  routing_domains = ["hub", "inspected", "onlyshared", "blocked"]
+  routing_domains = ["hub", "inspected", "onlyshared", "blocked", "shared"]
 
   # Information about the CIDR blocks and Inspection VPC attachments of each AWS Region
   region_information = {
@@ -123,6 +123,19 @@ data "aws_networkmanager_core_network_policy_document" "core_network_policy" {
       mode       = "attachment-route"
       segment    = domain.value
       share_with = [for r in local.region_names : "inspection${r}"]
+    }
+  }
+
+  # SHARED SEGMENT: sharing with all segments except blocked
+  dynamic "segment_actions" {
+    for_each = ["hub", "inspected", "onlyshared"]
+    iterator = domain
+
+    content {
+      action     = "share"
+      mode       = "attachment-route"
+      segment    = domain.value
+      share_with = ["shared"]
     }
   }
 

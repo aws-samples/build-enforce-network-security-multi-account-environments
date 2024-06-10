@@ -4,7 +4,7 @@ data "aws_region" "region" {}
 data "aws_caller_identity" "current" {}
 
 locals {
-  parameters = ["core_network", "ipam_pool_id"]
+  parameters = ["core_network", "ipam_pool_id", "r53_profile"]
 }
 
 # ---------- N. VIRGINIA ----------
@@ -49,10 +49,21 @@ module "nvirginia_compute" {
   source    = "./modules/compute"
   for_each  = module.nvirginia_vpcs
 
-  identifier      = var.identifier
-  vpc_name        = each.key
-  vpc             = each.value
-  vpc_information = var.vpcs.nvirginia[each.key]
+  identifier               = var.identifier
+  vpc_name                 = each.key
+  vpc                      = each.value
+  vpc_information          = var.vpcs.nvirginia[each.key]
+  ec2_iam_instance_profile = aws_iam_instance_profile.ec2_instance_profile.id
+}
+
+# Associating central Route 53 Profile (from Networking Account)
+resource "awscc_route53profiles_profile_association" "nvirginia_r53_profile_association" {
+  for_each = module.nvirginia_vpcs
+  provider = awscc.awsccnvirginia
+
+  name        = "r53_profile_association"
+  profile_id  = module.nvirginia_retrieve_parameters.parameter.r53_profile
+  resource_id = each.value.vpc_attributes.id
 }
 
 # Managed Prefix List
@@ -155,10 +166,21 @@ module "ohio_compute" {
   source    = "./modules/compute"
   for_each  = module.ohio_vpcs
 
-  identifier      = var.identifier
-  vpc_name        = each.key
-  vpc             = each.value
-  vpc_information = var.vpcs.ohio[each.key]
+  identifier               = var.identifier
+  vpc_name                 = each.key
+  vpc                      = each.value
+  vpc_information          = var.vpcs.ohio[each.key]
+  ec2_iam_instance_profile = aws_iam_instance_profile.ec2_instance_profile.id
+}
+
+# Associating central Route 53 Profile (from Networking Account)
+resource "awscc_route53profiles_profile_association" "ohio_r53_profile_association" {
+  for_each = module.ohio_vpcs
+  provider = awscc.awsccohio
+
+  name        = "r53_profile_association"
+  profile_id  = module.ohio_retrieve_parameters.parameter.r53_profile
+  resource_id = each.value.vpc_attributes.id
 }
 
 # Managed Prefix List
@@ -261,10 +283,21 @@ module "ireland_compute" {
   source    = "./modules/compute"
   for_each  = module.ireland_vpcs
 
-  identifier      = var.identifier
-  vpc_name        = each.key
-  vpc             = each.value
-  vpc_information = var.vpcs.ireland[each.key]
+  identifier               = var.identifier
+  vpc_name                 = each.key
+  vpc                      = each.value
+  vpc_information          = var.vpcs.ireland[each.key]
+  ec2_iam_instance_profile = aws_iam_instance_profile.ec2_instance_profile.id
+}
+
+# Associating central Route 53 Profile (from Networking Account)
+resource "awscc_route53profiles_profile_association" "ireland_r53_profile_association" {
+  for_each = module.ireland_vpcs
+  provider = awscc.awsccireland
+
+  name        = "r53_profile_association"
+  profile_id  = module.ireland_retrieve_parameters.parameter.r53_profile
+  resource_id = each.value.vpc_attributes.id
 }
 
 # Managed Prefix List
@@ -323,4 +356,44 @@ module "ireland_share_parameters" {
   parameters = {
     prefix_list_id = aws_ec2_managed_prefix_list.ireland_prefix_list.id
   }
+}
+
+# ---------- IAM ROLE (EC2 S3 read-only access) ----------
+# IAM instance profile
+resource "aws_iam_instance_profile" "ec2_instance_profile" {
+  provider = aws.awsnvirginia
+
+  name = "ec2_instance_profile"
+  role = aws_iam_role.role_ec2.id
+}
+
+# IAM role
+resource "aws_iam_role" "role_ec2" {
+  provider = aws.awsnvirginia
+
+  name               = "ec2_ssm_role"
+  path               = "/"
+  assume_role_policy = data.aws_iam_policy_document.policy_document.json
+}
+
+data "aws_iam_policy_document" "policy_document" {
+  statement {
+    sid     = "1"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+
+  }
+}
+
+# Policies Attachment to Role
+resource "aws_iam_policy_attachment" "s3_readonly_policy_attachment" {
+  provider = aws.awsnvirginia
+
+  name       = "s3_readonly_policy_attachment"
+  roles      = [aws_iam_role.role_ec2.id]
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
 }

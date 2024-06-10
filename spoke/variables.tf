@@ -35,10 +35,6 @@ variable "vpcs" {
         number_azs    = 2
         instance_type = "t2.micro"
       }
-      vpc2 = {
-        number_azs    = 2
-        instance_type = "t2.micro"
-      }
     }
 
     ohio = {
@@ -46,18 +42,10 @@ variable "vpcs" {
         number_azs    = 2
         instance_type = "t2.micro"
       }
-      vpc2 = {
-        number_azs    = 2
-        instance_type = "t2.micro"
-      }
     }
 
     ireland = {
       vpc1 = {
-        number_azs    = 2
-        instance_type = "t2.micro"
-      }
-      vpc2 = {
         number_azs    = 2
         instance_type = "t2.micro"
       }

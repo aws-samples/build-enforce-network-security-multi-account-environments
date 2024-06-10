@@ -7,6 +7,7 @@
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0.0 |
+| <a name="requirement_awscc"></a> [awscc](#requirement\_awscc) | = 0.78.0 |
 
 ## Providers
 
@@ -16,6 +17,9 @@
 | <a name="provider_aws.awsireland"></a> [aws.awsireland](#provider\_aws.awsireland) | >= 5.0.0 |
 | <a name="provider_aws.awsnvirginia"></a> [aws.awsnvirginia](#provider\_aws.awsnvirginia) | >= 5.0.0 |
 | <a name="provider_aws.awsohio"></a> [aws.awsohio](#provider\_aws.awsohio) | >= 5.0.0 |
+| <a name="provider_awscc.awsccireland"></a> [awscc.awsccireland](#provider\_awscc.awsccireland) | = 0.78.0 |
+| <a name="provider_awscc.awsccnvirginia"></a> [awscc.awsccnvirginia](#provider\_awscc.awsccnvirginia) | = 0.78.0 |
+| <a name="provider_awscc.awsccohio"></a> [awscc.awsccohio](#provider\_awscc.awsccohio) | = 0.78.0 |
 
 ## Modules
 
@@ -44,6 +48,9 @@
 | [aws_ec2_managed_prefix_list_entry.ireland_prefix_list_entry](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ec2_managed_prefix_list_entry) | resource |
 | [aws_ec2_managed_prefix_list_entry.nvirginia_prefix_list_entry](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ec2_managed_prefix_list_entry) | resource |
 | [aws_ec2_managed_prefix_list_entry.ohio_prefix_list_entry](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ec2_managed_prefix_list_entry) | resource |
+| [aws_iam_instance_profile.ec2_instance_profile](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_instance_profile) | resource |
+| [aws_iam_policy_attachment.s3_readonly_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy_attachment) | resource |
+| [aws_iam_role.role_ec2](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_ram_principal_association.ireland_pl_principal_association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ram_principal_association) | resource |
 | [aws_ram_principal_association.nvirginia_pl_principal_association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ram_principal_association) | resource |
 | [aws_ram_principal_association.ohio_pl_principal_association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ram_principal_association) | resource |
@@ -53,7 +60,11 @@
 | [aws_ram_resource_share.ireland_pl_resource_share](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ram_resource_share) | resource |
 | [aws_ram_resource_share.nvirginia_pl_resource_share](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ram_resource_share) | resource |
 | [aws_ram_resource_share.ohio_pl_resource_share](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ram_resource_share) | resource |
+| [awscc_route53profiles_profile_association.ireland_r53_profile_association](https://registry.terraform.io/providers/hashicorp/awscc/0.78.0/docs/resources/route53profiles_profile_association) | resource |
+| [awscc_route53profiles_profile_association.nvirginia_r53_profile_association](https://registry.terraform.io/providers/hashicorp/awscc/0.78.0/docs/resources/route53profiles_profile_association) | resource |
+| [awscc_route53profiles_profile_association.ohio_r53_profile_association](https://registry.terraform.io/providers/hashicorp/awscc/0.78.0/docs/resources/route53profiles_profile_association) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [aws_iam_policy_document.policy_document](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_organizations_organization.org](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/organizations_organization) | data source |
 | [aws_region.region](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 | [aws_vpc.ireland_vpcs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/vpc) | data source |
@@ -67,7 +78,7 @@
 | <a name="input_networking_account_id"></a> [networking\_account\_id](#input\_networking\_account\_id) | Networking AWS Account ID. | `string` | n/a | yes |
 | <a name="input_aws_regions"></a> [aws\_regions](#input\_aws\_regions) | AWS Regions to create the environment. | `map(string)` | <pre>{<br>  "ireland": "eu-west-1",<br>  "nvirginia": "us-east-1",<br>  "ohio": "us-east-2"<br>}</pre> | no |
 | <a name="input_identifier"></a> [identifier](#input\_identifier) | Project Identifier, used as identifer when creating resources. | `string` | `"nis342"` | no |
-| <a name="input_vpcs"></a> [vpcs](#input\_vpcs) | Information about the VPCs to create. | `any` | <pre>{<br>  "ireland": {<br>    "vpc1": {<br>      "instance_type": "t2.micro",<br>      "number_azs": 2<br>    },<br>    "vpc2": {<br>      "instance_type": "t2.micro",<br>      "number_azs": 2<br>    }<br>  },<br>  "nvirginia": {<br>    "vpc1": {<br>      "instance_type": "t2.micro",<br>      "number_azs": 2<br>    },<br>    "vpc2": {<br>      "instance_type": "t2.micro",<br>      "number_azs": 2<br>    }<br>  },<br>  "ohio": {<br>    "vpc1": {<br>      "instance_type": "t2.micro",<br>      "number_azs": 2<br>    },<br>    "vpc2": {<br>      "instance_type": "t2.micro",<br>      "number_azs": 2<br>    }<br>  }<br>}</pre> | no |
+| <a name="input_vpcs"></a> [vpcs](#input\_vpcs) | Information about the VPCs to create. | `any` | <pre>{<br>  "ireland": {<br>    "vpc1": {<br>      "instance_type": "t2.micro",<br>      "number_azs": 2<br>    }<br>  },<br>  "nvirginia": {<br>    "vpc1": {<br>      "instance_type": "t2.micro",<br>      "number_azs": 2<br>    }<br>  },<br>  "ohio": {<br>    "vpc1": {<br>      "instance_type": "t2.micro",<br>      "number_azs": 2<br>    }<br>  }<br>}</pre> | no |
 
 ## Outputs
 

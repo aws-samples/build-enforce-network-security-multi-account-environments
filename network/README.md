@@ -7,6 +7,7 @@
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0.0 |
+| <a name="requirement_awscc"></a> [awscc](#requirement\_awscc) | = 0.78.0 |
 
 ## Providers
 
@@ -28,16 +29,19 @@
 | <a name="module_ireland_firewall_policy"></a> [ireland\_firewall\_policy](#module\_ireland\_firewall\_policy) | ./modules/firewall_policy | n/a |
 | <a name="module_ireland_retrieve_parameters"></a> [ireland\_retrieve\_parameters](#module\_ireland\_retrieve\_parameters) | ../modules/retrieve_parameters | n/a |
 | <a name="module_ireland_share_parameter"></a> [ireland\_share\_parameter](#module\_ireland\_share\_parameter) | ../modules/share_parameter | n/a |
+| <a name="module_ireland_vpc_endpoints"></a> [ireland\_vpc\_endpoints](#module\_ireland\_vpc\_endpoints) | ./modules/vpc_endpoints | n/a |
 | <a name="module_nvirginia_automation"></a> [nvirginia\_automation](#module\_nvirginia\_automation) | ./modules/automation | n/a |
 | <a name="module_nvirginia_central"></a> [nvirginia\_central](#module\_nvirginia\_central) | aws-ia/cloudwan/aws | 3.2.0 |
 | <a name="module_nvirginia_firewall_policy"></a> [nvirginia\_firewall\_policy](#module\_nvirginia\_firewall\_policy) | ./modules/firewall_policy | n/a |
 | <a name="module_nvirginia_retrieve_parameters"></a> [nvirginia\_retrieve\_parameters](#module\_nvirginia\_retrieve\_parameters) | ../modules/retrieve_parameters | n/a |
 | <a name="module_nvirginia_share_parameter"></a> [nvirginia\_share\_parameter](#module\_nvirginia\_share\_parameter) | ../modules/share_parameter | n/a |
+| <a name="module_nvirginia_vpc_endpoints"></a> [nvirginia\_vpc\_endpoints](#module\_nvirginia\_vpc\_endpoints) | ./modules/vpc_endpoints | n/a |
 | <a name="module_ohio_automation"></a> [ohio\_automation](#module\_ohio\_automation) | ./modules/automation | n/a |
 | <a name="module_ohio_central"></a> [ohio\_central](#module\_ohio\_central) | aws-ia/cloudwan/aws | 3.2.0 |
 | <a name="module_ohio_firewall_policy"></a> [ohio\_firewall\_policy](#module\_ohio\_firewall\_policy) | ./modules/firewall_policy | n/a |
 | <a name="module_ohio_retrieve_parameters"></a> [ohio\_retrieve\_parameters](#module\_ohio\_retrieve\_parameters) | ../modules/retrieve_parameters | n/a |
 | <a name="module_ohio_share_parameter"></a> [ohio\_share\_parameter](#module\_ohio\_share\_parameter) | ../modules/share_parameter | n/a |
+| <a name="module_ohio_vpc_endpoints"></a> [ohio\_vpc\_endpoints](#module\_ohio\_vpc\_endpoints) | ./modules/vpc_endpoints | n/a |
 
 ## Resources
 
@@ -50,8 +54,17 @@
 | [aws_networkmanager_core_network_policy_attachment.core_network_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/networkmanager_core_network_policy_attachment) | resource |
 | [aws_networkmanager_global_network.global_network](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/networkmanager_global_network) | resource |
 | [aws_ram_principal_association.cwan_principal_association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ram_principal_association) | resource |
+| [aws_ram_principal_association.ireland_dns_principal_association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ram_principal_association) | resource |
+| [aws_ram_principal_association.nvirginia_dns_principal_association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ram_principal_association) | resource |
+| [aws_ram_principal_association.ohio_dns_principal_association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ram_principal_association) | resource |
 | [aws_ram_resource_association.cwan_resource_association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ram_resource_association) | resource |
+| [aws_ram_resource_association.ireland_profile_resource_association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ram_resource_association) | resource |
+| [aws_ram_resource_association.nvirginia_profile_resource_association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ram_resource_association) | resource |
+| [aws_ram_resource_association.ohio_profile_resource_association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ram_resource_association) | resource |
 | [aws_ram_resource_share.cwan_resource_share](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ram_resource_share) | resource |
+| [aws_ram_resource_share.ireland_dns_resource_share](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ram_resource_share) | resource |
+| [aws_ram_resource_share.nvirginia_dns_resource_share](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ram_resource_share) | resource |
+| [aws_ram_resource_share.ohio_dns_resource_share](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ram_resource_share) | resource |
 | [archive_file.cwan_automation_package](https://registry.terraform.io/providers/hashicorp/archive/latest/docs/data-sources/file) | data source |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_ec2_managed_prefix_list.ireland_prefix_list](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ec2_managed_prefix_list) | data source |

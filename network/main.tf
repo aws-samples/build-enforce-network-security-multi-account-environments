@@ -265,6 +265,21 @@ module "nvirginia_central" {
         }
       }
     }
+    shared_services = {
+      type                    = "shared_services"
+      vpc_ipv4_ipam_pool_id   = module.ipam.pools_level_2["nvirginia/central"].id
+      vpc_ipv4_netmask_length = 24
+      az_count                = 2
+
+      subnets = {
+        endpoints = { netmask = 28 }
+        core_network = {
+          netmask = 28
+
+          tags = { domain = "shared" }
+        }
+      }
+    }
   }
 
   aws_network_firewall = {
@@ -283,6 +298,38 @@ module "nvirginia_firewall_policy" {
   identifier = var.identifier
 }
 
+module "nvirginia_vpc_endpoints" {
+  providers = {
+    aws   = aws.awsnvirginia
+    awscc = awscc.awsccnvirginia
+  }
+  source = "./modules/vpc_endpoints"
+
+  service_endpoints = ["s3"]
+  vpc_information   = module.nvirginia_central.central_vpcs["shared_services"]
+}
+
+resource "aws_ram_resource_share" "nvirginia_dns_resource_share" {
+  provider = aws.awsnvirginia
+
+  name                      = "DNS Resolution - Amazon Route 53 Profiles"
+  allow_external_principals = false
+}
+
+resource "aws_ram_principal_association" "nvirginia_dns_principal_association" {
+  provider = aws.awsnvirginia
+
+  principal          = data.aws_organizations_organization.org.arn
+  resource_share_arn = aws_ram_resource_share.nvirginia_dns_resource_share.arn
+}
+
+resource "aws_ram_resource_association" "nvirginia_profile_resource_association" {
+  provider = aws.awsnvirginia
+
+  resource_arn       = module.nvirginia_vpc_endpoints.r53_profile
+  resource_share_arn = aws_ram_resource_share.nvirginia_dns_resource_share.arn
+}
+
 module "nvirginia_share_parameter" {
   providers = { aws = aws.awsnvirginia }
   source    = "../modules/share_parameter"
@@ -291,6 +338,7 @@ module "nvirginia_share_parameter" {
   parameters = {
     core_network = aws_networkmanager_core_network.core_network.arn
     ipam_pool_id = module.ipam.pools_level_2["nvirginia/spoke"].id
+    r53_profile  = split("/", module.nvirginia_vpc_endpoints.r53_profile)[1]
   }
 }
 
@@ -328,6 +376,21 @@ module "ohio_central" {
         }
       }
     }
+    shared_services = {
+      type                    = "shared_services"
+      vpc_ipv4_ipam_pool_id   = module.ipam.pools_level_2["ohio/central"].id
+      vpc_ipv4_netmask_length = 24
+      az_count                = 2
+
+      subnets = {
+        endpoints = { netmask = 28 }
+        core_network = {
+          netmask = 28
+
+          tags = { domain = "shared" }
+        }
+      }
+    }
   }
 
   aws_network_firewall = {
@@ -346,6 +409,38 @@ module "ohio_firewall_policy" {
   identifier = var.identifier
 }
 
+module "ohio_vpc_endpoints" {
+  providers = {
+    aws   = aws.awsohio
+    awscc = awscc.awsccohio
+  }
+  source = "./modules/vpc_endpoints"
+
+  service_endpoints = ["s3"]
+  vpc_information   = module.ohio_central.central_vpcs["shared_services"]
+}
+
+resource "aws_ram_resource_share" "ohio_dns_resource_share" {
+  provider = aws.awsohio
+
+  name                      = "DNS Resolution - Amazon Route 53 Profiles"
+  allow_external_principals = false
+}
+
+resource "aws_ram_principal_association" "ohio_dns_principal_association" {
+  provider = aws.awsohio
+
+  principal          = data.aws_organizations_organization.org.arn
+  resource_share_arn = aws_ram_resource_share.ohio_dns_resource_share.arn
+}
+
+resource "aws_ram_resource_association" "ohio_profile_resource_association" {
+  provider = aws.awsohio
+
+  resource_arn       = module.ohio_vpc_endpoints.r53_profile
+  resource_share_arn = aws_ram_resource_share.ohio_dns_resource_share.arn
+}
+
 module "ohio_share_parameter" {
   providers = { aws = aws.awsohio }
   source    = "../modules/share_parameter"
@@ -354,6 +449,7 @@ module "ohio_share_parameter" {
   parameters = {
     core_network = aws_networkmanager_core_network.core_network.arn
     ipam_pool_id = module.ipam.pools_level_2["ohio/spoke"].id
+    r53_profile  = split("/", module.ohio_vpc_endpoints.r53_profile)[1]
   }
 }
 
@@ -391,6 +487,21 @@ module "ireland_central" {
         }
       }
     }
+    shared_services = {
+      type                    = "shared_services"
+      vpc_ipv4_ipam_pool_id   = module.ipam.pools_level_2["ireland/central"].id
+      vpc_ipv4_netmask_length = 24
+      az_count                = 2
+
+      subnets = {
+        endpoints = { netmask = 28 }
+        core_network = {
+          netmask = 28
+
+          tags = { domain = "shared" }
+        }
+      }
+    }
   }
 
   aws_network_firewall = {
@@ -409,6 +520,38 @@ module "ireland_firewall_policy" {
   identifier = var.identifier
 }
 
+module "ireland_vpc_endpoints" {
+  providers = {
+    aws   = aws.awsireland
+    awscc = awscc.awsccireland
+  }
+  source = "./modules/vpc_endpoints"
+
+  service_endpoints = ["s3"]
+  vpc_information   = module.ireland_central.central_vpcs["shared_services"]
+}
+
+resource "aws_ram_resource_share" "ireland_dns_resource_share" {
+  provider = aws.awsireland
+
+  name                      = "DNS Resolution - Amazon Route 53 Profiles"
+  allow_external_principals = false
+}
+
+resource "aws_ram_principal_association" "ireland_dns_principal_association" {
+  provider = aws.awsireland
+
+  principal          = data.aws_organizations_organization.org.arn
+  resource_share_arn = aws_ram_resource_share.ireland_dns_resource_share.arn
+}
+
+resource "aws_ram_resource_association" "ireland_profile_resource_association" {
+  provider = aws.awsireland
+
+  resource_arn       = module.ireland_vpc_endpoints.r53_profile
+  resource_share_arn = aws_ram_resource_share.ireland_dns_resource_share.arn
+}
+
 module "ireland_share_parameter" {
   providers = { aws = aws.awsireland }
   source    = "../modules/share_parameter"
@@ -417,6 +560,7 @@ module "ireland_share_parameter" {
   parameters = {
     core_network = aws_networkmanager_core_network.core_network.arn
     ipam_pool_id = module.ipam.pools_level_2["ireland/spoke"].id
+    r53_profile  = split("/", module.ireland_vpc_endpoints.r53_profile)[1]
   }
 }
 
